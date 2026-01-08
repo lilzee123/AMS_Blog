@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+    <channel>
+        <title>テスト on ams</title>
+        <link>https://lilzee123.github.io/AMS_Blog/categories/%E3%83%86%E3%82%B9%E3%83%88/</link>
+        <description>Recent content in テスト on ams</description>
+        <generator>Hugo -- gohugo.io</generator>
+        <language>zh-cn</language>
+        <copyright>Ovo</copyright><atom:link href="https://lilzee123.github.io/AMS_Blog/categories/%E3%83%86%E3%82%B9%E3%83%88/index.xml" rel="self" type="application/rss+xml" />
+    </channel>
+</rss>
