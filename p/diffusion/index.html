@@ -1011,8 +1011,7 @@ $$\mathbf{\Sigma}_\theta$$<p>（因为均值部分已经被 $\mathcal{L}_{\text{
 <script>
     var pjax = new Pjax({
         selectors: [
-            ".main-container",
-	    ".js-Pjax"
+            ".main-container"
         ]
     })
     
@@ -1022,14 +1021,11 @@ $$\mathbf{\Sigma}_\theta$$<p>（因为均值部分已经被 $\mathcal{L}_{\text{
             '1.0': 'rgba(0, 149, 234,  1)' 
         }
     })
-	
     document.addEventListener('pjax:send', () => {
         
         topbar.show();
     })
-	
     document.addEventListener('pjax:complete', () => {
-        ....
         
         topbar.hide();
     })
