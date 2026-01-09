@@ -6,7 +6,7 @@
 
 <link rel='canonical' href='https://lilzee123.github.io/AMS_Blog/en/categories/'>
 
-<link rel="stylesheet" href="/AMS_Blog/scss/style.min.833d6eed45de56f48306bf57268d5b8cdfc8a60e8e7bdc99810464fcd033f7c6.css"><meta property='og:title' content="Categories">
+<link rel="stylesheet" href="/AMS_Blog/scss/style.min.b0b5dc61c9c668a9825df55eb3fb4b6f2b6e4dc815d5bd5ba6b1375d14b9fca6.css"><meta property='og:title' content="Categories">
 <meta property='og:description' content="Example description">
 <meta property='og:url' content='https://lilzee123.github.io/AMS_Blog/en/categories/'>
 <meta property='og:site_name' content='Example Site'>
@@ -249,7 +249,7 @@
                 src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
                 
                 >
-            </script><script type="text/javascript" src="/AMS_Blog/ts/main.c922af694cc257bf1ecc41c0dd7b0430f9114ec280ccf67cd2c6ad55f5316c4e.js" defer></script>
+            </script><script type="text/javascript" src="/AMS_Blog/ts/main.b4654cd74006fe7475d7723cd7373672b5ea2035ab23404eb9ff511cb27b581c.js" defer></script>
 <script>
     (function () {
         const customFont = document.createElement('link');
@@ -260,6 +260,91 @@
 
         document.head.appendChild(customFont);
     }());
+</script>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css">
+<script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/meting@2/dist/Meting.min.js"></script>
+
+<meting-js
+	server="netease"
+	type="playlist"
+	id="7665583165"
+	fixed=true
+	mini=true>
+</meting-js>
+<script src="https://cdn.jsdelivr.net/npm/pjax/pjax.min.js"></script>
+
+
+    
+    <script src=https://lilzee123.github.io/AMS_Blog/js/topbar.min.js></script>
+
+
+<script>
+    var pjax = new Pjax({
+        selectors: [
+            ".main-container",
+	    ".js-Pjax"
+        ]
+    })
+    
+    topbar.config({
+        barColors: {
+            '0': 'rgba(255,  255, 255, 1)', 
+            '1.0': 'rgba(0, 149, 234,  1)' 
+        }
+    })
+	
+    document.addEventListener('pjax:send', () => {
+        
+        topbar.show();
+    })
+	
+    document.addEventListener('pjax:complete', () => {
+        ....
+        
+        topbar.hide();
+    })
+</script>
+
+<div class="js-Pjax">
+    <script>
+        
+        (function() {
+            let script = document.createElement('script');
+            
+             script.setAttribute('key', 'value');
+            ...
+            
+            document.querySelector('xxx').appendchild(script)
+        })(document)
+    </script>
+<div>
+
+<script>
+    pjax._handleResponse = pjax.handleResponse;
+    pjax.handleResponse = function(responseText, request, href, options) {
+        if (request.responseText.match("<html")) {
+            if (responseText) {
+                
+                let newDom = new DOMParser().parseFromString(responseText, 'text/html');
+                
+                let bodyClass = newDom.body.className;
+                document.body.setAttribute("class", bodyClass)
+            }
+            
+            pjax._handleResponse(responseText, request, href, options);
+        } else {
+            
+        }
+    }
+</script>
+<script>
+    document.addEventListener('pjax:complete', () => {
+        
+        window.Stack.init();
+    })
 </script>
 
     </body>
