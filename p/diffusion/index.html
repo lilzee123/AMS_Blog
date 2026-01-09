@@ -1,0 +1,993 @@
+<!DOCTYPE html>
+<html lang="zh-cn" dir="ltr">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="1. DDPM 前向扩散：对一张图片不断加入噪声（正态分布），产生一系列噪声数据。\n去噪过程：训练一个噪声predicter，预测每一个噪声图片的噪声。\nDiffusion的成功：N次迭代？\n">
+<title>Diffusion</title>
+
+<link rel='canonical' href='https://lilzee123.github.io/AMS_Blog/p/diffusion/'>
+
+<link rel="stylesheet" href="/AMS_Blog/scss/style.min.833d6eed45de56f48306bf57268d5b8cdfc8a60e8e7bdc99810464fcd033f7c6.css"><meta property='og:title' content="Diffusion">
+<meta property='og:description' content="1. DDPM 前向扩散：对一张图片不断加入噪声（正态分布），产生一系列噪声数据。\n去噪过程：训练一个噪声predicter，预测每一个噪声图片的噪声。\nDiffusion的成功：N次迭代？\n">
+<meta property='og:url' content='https://lilzee123.github.io/AMS_Blog/p/diffusion/'>
+<meta property='og:site_name' content='ams'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:published_time' content='2026-01-08T18:39:21&#43;08:00'/><meta property='article:modified_time' content='2026-01-08T18:39:21&#43;08:00'/><meta property='og:image' content='https://lilzee123.github.io/AMS_Blog/p/diffusion/Haruka.png' />
+<meta name="twitter:title" content="Diffusion">
+<meta name="twitter:description" content="1. DDPM 前向扩散：对一张图片不断加入噪声（正态分布），产生一系列噪声数据。\n去噪过程：训练一个噪声predicter，预测每一个噪声图片的噪声。\nDiffusion的成功：N次迭代？\n"><meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content='https://lilzee123.github.io/AMS_Blog/p/diffusion/Haruka.png' />
+    <link rel="shortcut icon" href="/favicon.ico" />
+
+    </head>
+    <body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="切换菜单">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        
+            
+            <figure class="site-avatar">
+                <a href="/AMS_Blog/">
+                
+                    
+                    
+                    
+                        
+                        <img src="/AMS_Blog/img/avatar_hu_b5976aa1afdc1d2e.png" width="300"
+                            height="300" class="site-logo" loading="lazy" alt="Avatar">
+                    
+                
+                </a>
+                
+                    <span class="emoji">🍥</span>
+                
+            </figure>
+            
+        
+        
+        <div class="site-meta">
+            <h1 class="site-name"><a href="/AMS_Blog">ams</a></h1>
+            <h2 class="site-description">Go for ide</h2>
+        </div>
+    </header><ol class="menu-social">
+            
+                <li>
+                    <a 
+                        href='https://www.bilibili.com/'
+                        target="_blank"
+                        title="Bilibili"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+    <g>
+        <path fill="none" d="M0 0h24v24H0z"/>
+        <path d="M7.172 2.757L10.414 6h3.171l3.243-3.242a1 1 0 0 1 1.415 1.415l-1.829 1.827L18.5 6A3.5 3.5 0 0 1 22 9.5v8a3.5 3.5 0 0 1-3.5 3.5h-13A3.5 3.5 0 0 1 2 17.5v-8A3.5 3.5 0 0 1 5.5 6h2.085L5.757 4.171a1 1 0 0 1 1.415-1.415zM18.5 8h-13a1.5 1.5 0 0 0-1.493 1.356L4 9.5v8a1.5 1.5 0 0 0 1.356 1.493L5.5 19h13a1.5 1.5 0 0 0 1.493-1.356L20 17.5v-8A1.5 1.5 0 0 0 18.5 8zM8 11a1 1 0 0 1 1 1v2a1 1 0 0 1-2 0v-2a1 1 0 0 1 1-1zm8 0a1 1 0 0 1 1 1v2a1 1 0 0 1-2 0v-2a1 1 0 0 1 1-1z"/>
+    </g>
+</svg>
+
+                        
+                    </a>
+                </li>
+            
+                <li>
+                    <a 
+                        href='https://github.com/CaiJimmy/hugo-theme-stack'
+                        target="_blank"
+                        title="GitHub"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+        </ol><ol class="menu" id="main-menu">
+        
+        
+        
+        <li >
+            <a href='/AMS_Blog/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>主页</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/AMS_Blog/%E5%85%B3%E4%BA%8E/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>关于</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/AMS_Blog/archives/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>归档</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/AMS_Blog/search/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                <span>搜索</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/AMS_Blog/%E9%93%BE%E6%8E%A5/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M10 14a3.5 3.5 0 0 0 5 0l4 -4a3.5 3.5 0 0 0 -5 -5l-.5 .5" />
+  <path d="M14 10a3.5 3.5 0 0 0 -5 0l-4 4a3.5 3.5 0 0 0 5 5l.5 -.5" />
+</svg>
+
+
+
+                
+                <span>链接</span>
+            </a>
+        </li>
+        
+        <li class="menu-bottom-section">
+            <ol class="menu">
+                    
+                        <li id="i18n-switch">  
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-language" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M4 5h7" />
+  <path d="M9 3v2c0 4.418 -2.239 8 -5 8" />
+  <path d="M5 9c-.003 2.144 2.952 3.908 6.7 4" />
+  <path d="M12 20l4 -9l4 9" />
+  <path d="M19.1 18h-6.2" />
+</svg>
+
+
+
+                            <select name="language" title="language" onchange="window.location.href = this.selectedOptions[0].value">
+                                
+                                    <option value="https://lilzee123.github.io/AMS_Blog/en/" >English</option>
+                                
+                                    <option value="https://lilzee123.github.io/AMS_Blog/" selected>简体中文</option>
+                                
+                            </select>
+                        </li>
+                    
+                
+
+                
+                    <li id="dark-mode-toggle">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="8" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="16" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <span>暗色模式</span>
+                    </li>
+                
+            </ol>
+        </li>
+    </ol>
+</aside>
+
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">目录</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
+  <ol>
+    <li><a href="#1-ddpm">1. DDPM</a></li>
+    <li><a href="#2-details">2. Details</a>
+      <ol>
+        <li><a href="#21-training-algorithm训练过程">2.1 Training Algorithm（训练过程）</a></li>
+        <li><a href="#22-sampling-algorithm生成过程">2.2 Sampling Algorithm（生成过程）</a></li>
+      </ol>
+    </li>
+    <li><a href="#3-improved-ddpm">3. Improved DDPM</a></li>
+    <li><a href="#4-classifier-free-guidance">4. Classifier Free Guidance</a>
+      <ol>
+        <li><a href="#条件注入的方法">条件注入的方法</a></li>
+      </ol>
+    </li>
+  </ol>
+</nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
+
+            <main class="main full-width">
+    <article class="has-image main-article">
+    <header class="article-header">
+        <div class="article-image">
+            <a href="/AMS_Blog/p/diffusion/">
+                <img src="/AMS_Blog/p/diffusion/Haruka_hu_e6d003589726a331.png"
+                        srcset="/AMS_Blog/p/diffusion/Haruka_hu_e6d003589726a331.png 800w, /AMS_Blog/p/diffusion/Haruka_hu_bfd101707df17ab4.png 1600w"
+                        width="800" 
+                        height="457" 
+                        loading="lazy"
+                        alt="Featured image of post Diffusion" />
+                
+            </a>
+        </div>
+    
+
+    <div class="article-details">
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/AMS_Blog/p/diffusion/">Diffusion</a>
+        </h2>
+    
+        
+    </div>
+
+    
+    
+    
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published" datetime='2026-01-08T18:39:21&#43;08:00'>2026-01-08</time>
+            </div>
+        
+
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time class="article-time--reading">
+                    阅读时长: 7 分钟
+                </time>
+            </div>
+        
+    </footer>
+    
+
+    
+</div>
+
+</header>
+
+    <section class="article-content">
+    
+    
+    <h2 id="1-ddpm">1. DDPM
+</h2><ol>
+<li>
+<p>前向扩散：对一张图片不断加入噪声（正态分布），产生一系列噪声数据。</p>
+</li>
+<li>
+<p>去噪过程：训练一个噪声predicter，预测每一个噪声图片的噪声。</p>
+</li>
+</ol>
+<p>Diffusion的成功：N次迭代？</p>
+<p>噪声predicter：输入为噪声图片，时间步t，text向量（Text-to-Image）</p>
+<p><img src="/AMS_Blog/p/diffusion/images/image-14.png"
+	width="829"
+	height="235"
+	srcset="/AMS_Blog/p/diffusion/images/image-14_hu_2e225eea30313f03.png 480w, /AMS_Blog/p/diffusion/images/image-14_hu_3317af237bf0864e.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="352"
+		data-flex-basis="846px"
+	
+></p>
+<p>评价指标：</p>
+<p>FID：Frechet distance between the two Gaussians，评价图片逼真程度</p>
+<p>CLIP Score：评价Text-to-Image的好坏</p>
+<p>Stable Diffusion（常用框架）：</p>
+<p><img src="/AMS_Blog/p/diffusion/images/image-9.png"
+	width="936"
+	height="428"
+	srcset="/AMS_Blog/p/diffusion/images/image-9_hu_6f94b4b358480831.png 480w, /AMS_Blog/p/diffusion/images/image-9_hu_17ac036f2956c1d9.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="218"
+		data-flex-basis="524px"
+	
+></p>
+<p><img src="/AMS_Blog/p/diffusion/images/image-11.png"
+	width="830"
+	height="402"
+	srcset="/AMS_Blog/p/diffusion/images/image-11_hu_26b259ea0a2fd20e.png 480w, /AMS_Blog/p/diffusion/images/image-11_hu_39a08ceb02c382f.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="206"
+		data-flex-basis="495px"
+	
+></p>
+<ol>
+<li>Decoder</li>
+</ol>
+<p>（1）中间产物是图片的压缩版本，训练：</p>
+<p><img src="/AMS_Blog/p/diffusion/images/image-8.png"
+	width="483"
+	height="140"
+	srcset="/AMS_Blog/p/diffusion/images/image-8_hu_e14112f70a83c24e.png 480w, /AMS_Blog/p/diffusion/images/image-8_hu_85c3da7bfb52eb9c.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="345"
+		data-flex-basis="828px"
+	
+></p>
+<p>（2）中间产物是latent representation，训练auto-encoder：</p>
+<p><img src="/AMS_Blog/p/diffusion/images/image-7.png"
+	width="949"
+	height="295"
+	srcset="/AMS_Blog/p/diffusion/images/image-7_hu_4d2c991431918eb.png 480w, /AMS_Blog/p/diffusion/images/image-7_hu_2fce253d3cd76674.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="321"
+		data-flex-basis="772px"
+	
+></p>
+<ul>
+<li>Generation Model</li>
+</ul>
+<p>将图片输入encoder，得到latent representation，对latent representation进行加噪和去噪操作进行训练，预测过程不变。（因为输出变成了一个latent representation）</p>
+<h2 id="2-details">2. Details
+</h2><h3 id="21-training-algorithm训练过程">2.1 Training Algorithm（训练过程）
+</h3><ol>
+<li>
+<p>抽取clean image，原始图片</p>
+</li>
+<li>
+<p>抽取一个时间步t</p>
+</li>
+<li>
+<p>随机取样noise</p>
+</li>
+<li>
+<p>计算梯度：原始图片和noise以一个权重（事先定义）相加，经过predicter预测一个noise，与原noise做平方差，求导得梯度。</p>
+</li>
+</ol>
+<p><img src="/AMS_Blog/p/diffusion/images/image-13.png"
+	width="758"
+	height="386"
+	srcset="/AMS_Blog/p/diffusion/images/image-13_hu_9fc78ade9637443b.png 480w, /AMS_Blog/p/diffusion/images/image-13_hu_dd675ff5d3b883e9.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="196"
+		data-flex-basis="471px"
+	
+></p>
+<p>数学推导：</p>
+$$x_{0}到x_{t}可以简化为如下公式，因此可以把beta式简化为alpha_{t},alpha_{t}由大变小$$<p><img src="/AMS_Blog/p/diffusion/images/image-12.png"
+	width="981"
+	height="551"
+	srcset="/AMS_Blog/p/diffusion/images/image-12_hu_68d94e240805c4ee.png 480w, /AMS_Blog/p/diffusion/images/image-12_hu_e37fcd396f1cbbc8.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="178"
+		data-flex-basis="427px"
+	
+></p>
+<h3 id="22-sampling-algorithm生成过程">2.2 Sampling Algorithm（生成过程）
+</h3><p>公式推导（已知）：&ndash;基于最大似然估计</p>
+<p>已知噪声预测$q(x_{t-1}|x_{t},x_0)$的分布（其实就是 $x_{t-1}$的分布），而predicter预测结果 $P(x_{t-1}|x_{t})$的分布要与噪声预测 $q(x_{t-1}|x_{t},x_0)$分布越接近越好，在不考虑方差的情况下，那就是使得predicter预测的均值与噪声预测分布的均值越接近越好。</p>
+<p>噪声预测均值为:</p>
+<p><img src="/AMS_Blog/p/diffusion/images/image.png"
+	width="248"
+	height="110"
+	srcset="/AMS_Blog/p/diffusion/images/image_hu_7585ce55e1b585c4.png 480w, /AMS_Blog/p/diffusion/images/image_hu_43cbb3921b2cbcf9.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="225"
+		data-flex-basis="541px"
+	
+></p>
+<p>即predicter预测分布的均值，再加上随机噪声z和固定方差 $\sigma$( $\sigma_t^2通常取\beta_t$)，得到预测分布。</p>
+<p>补充：在得到 $x_0$（利用预测噪声）和 $x_t$之后，可以利用后验概率计算得到 $x_{t-1}$(在数学上和上述式子是等价的):</p>
+$$\hat{x}_0 = \frac{1}{\sqrt{\bar{\alpha}_t}}(x_t - \sqrt{1-\bar{\alpha}_t} \epsilon_\theta)$$$$\tilde{mu}_t = \frac{\sqrt{\bar{\alpha}_{t-1}}\beta_t}{1-\bar{\alpha}_t}x_0 + \frac{\sqrt{\alpha_t}(1-\bar{\alpha}_{t-1})}{1-\bar{\alpha}_t}x_t$$<p><img src="/AMS_Blog/p/diffusion/images/image-10.png"
+	width="675"
+	height="257"
+	srcset="/AMS_Blog/p/diffusion/images/image-10_hu_d0169064ae54dee1.png 480w, /AMS_Blog/p/diffusion/images/image-10_hu_d0ed5259126b503c.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="262"
+		data-flex-basis="630px"
+	
+></p>
+<p><img src="/AMS_Blog/p/diffusion/images/image-1.png"
+	width="984"
+	height="301"
+	srcset="/AMS_Blog/p/diffusion/images/image-1_hu_db123642e31f8a12.png 480w, /AMS_Blog/p/diffusion/images/image-1_hu_f02e887ff5ffd056.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="326"
+		data-flex-basis="784px"
+	
+></p>
+<h2 id="3-improved-ddpm">3. Improved DDPM
+</h2><p>虽然 DDPM 在生成任务上取得了不错的效果，但如果使用一些 metric 对 DDPM 进行评价，就会发现其虽然能在 FID 和 Inception Score 上获得不错的效果，但在<strong>负对数似然（Negative Log-likelihood，NLL）</strong>这个指标上表现不够好。</p>
+<p>NLL 上的表现体现的是模型捕捉数据整体分布的能力。而且有工作表明即使在 NLL 指标上仅有微小的提升，就会在生成效果和特征表征能力上有很大的提升。</p>
+<p>Improved DDPM 主要是针对 DDPM 的训练过程进行改进，主要从两个方面进行改进：</p>
+<p>1.不使用 DDPM 原有的固定方差，而是使用可学习的方差；</p>
+<p>这个工作的作者认为因为方差的变化范围比较小，不太容易用神经网络进行学习，所以实际上使用的方差是对  $\beta_t$和 $\tilde{\beta_t}$ 进行插值的结果（log形式，v是一个可学习的参数（0-1））， $\beta_t$是方差最大值， </p>
+$$\tilde{\beta}_t = \frac{1-\bar{\alpha}_{t-1}}{1-\bar{\alpha}_t} \beta_t $$<p> 是最小值</p>
+<p><img src="/AMS_Blog/p/diffusion/images/image-2.png"
+	width="356"
+	height="50"
+	srcset="/AMS_Blog/p/diffusion/images/image-2_hu_9002ef57dbf0c236.png 480w, /AMS_Blog/p/diffusion/images/image-2_hu_54136d0e44ca8c54.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="712"
+		data-flex-basis="1708px"
+	
+></p>
+<p>2.改进了加噪过程，使用余弦形式的 Scheduler，而不是线性 Scheduler。</p>
+<p>本文的作者发现线性的  $\beta_t$对于高分辨率图像效果不错，但对于低分辨率的图像表现不佳。因为如果最开始的时候加入很大的噪声，会严重破坏图像信息，不利于图像的学习。</p>
+<p>作者把方差用一种 cosine 的形式定义，不过并不是直接定义 $\beta_t$，而是定义 $\bar{\alpha_t}$。</p>
+<p><img src="/AMS_Blog/p/diffusion/images/image-3.png"
+	width="128"
+	height="34"
+	srcset="/AMS_Blog/p/diffusion/images/image-3_hu_4f9e0c4610faaed5.png 480w, /AMS_Blog/p/diffusion/images/image-3_hu_a410911f0b706bba.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="376"
+		data-flex-basis="903px"
+	
+></p>
+<p>变化差异如图所示。</p>
+<p><img src="/AMS_Blog/p/diffusion/images/image-4.png"
+	width="383"
+	height="79"
+	srcset="/AMS_Blog/p/diffusion/images/image-4_hu_bce26153df3bf976.png 480w, /AMS_Blog/p/diffusion/images/image-4_hu_fcc878c785ff9567.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="484"
+		data-flex-basis="1163px"
+	
+></p>
+<p><img src="/AMS_Blog/p/diffusion/images/image-5.png"
+	width="1280"
+	height="869"
+	srcset="/AMS_Blog/p/diffusion/images/image-5_hu_daf9393d09a11482.png 480w, /AMS_Blog/p/diffusion/images/image-5_hu_3f5768851434684.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="147"
+		data-flex-basis="353px"
+	
+></p>
+<p>训练过程和代码实现详见：https://littlenyima.github.io/posts/15-improved-denoising-diffusion-probabilistic-models/</p>
+<p>3.重要性采样</p>
+<p>在计算损失函数时，损失函数包括DDPM的L2损失和VLB损失两项。其中VLB损失为1-T的所有时间步的加和平均。</p>
+<p>但这会带来两个问题：</p>
+<p>1.<strong>计算量大：</strong> 需要计算所有 T 个时间步的损失。</p>
+<p>2.<strong>方差高：</strong> 不同时间步 t 的 $L_t$ 项对方差的贡献可能非常不均匀。</p>
+<p>为了解决这两个问题，Improved Diffusion 模型提出了一种<strong>采样</strong>时间步 t 的方法来估计 VLB 损失，具体为对每个时间步存储最近的10个历史损失，根据每个时间步的损失大小分配权重w，并且对w进行动态更新（EMA？）</p>
+<p><strong>实际操作：</strong></p>
+<p>1.<strong>采样 t：</strong> 模型从重要性采样分布 p(t) 中<strong>采样</strong>一个时间步 t</p>
+<p>2.<strong>计算 </strong>$L_t$<strong>：</strong> 计算在当前采样的 t 上的 VLB 损失项 </p>
+$$L_t = D_{\text{KL}}(q(\mathbf{x}_{t-1}|\mathbf{x}_t, \mathbf{x}_0) || p_\theta(\mathbf{x}_{t-1}|\mathbf{x}_t))$$<p>3.<strong>应用权重：</strong> 将 $L_t$ 乘以重要性校正权重 $W_t = frac{1/T}{p(t)}$，得到该迭代的 VLB 估计损失： </p>
+$$\hat{L}_{\text{VLB}} = W_t \cdot L_t$$<p>最终的训练损失是这两个损失的加权和：</p>
+$$\mathcal{L}_{\text{total}} = \mathcal{L}_{\text{simple}} + \lambda \cdot \mathcal{L}_{\text{VLB}}$$<p>其中 $\lambda$ 是 VLB 损失的权重，通常是一个较小的常数。</p>
+<p>优化 VLB 损失直接强制模型学习一个更准确的噪声概率分布 $p_\theta(\mathbf{x}_0)$（因为VLB损失使得模型预测方差更接近真实的方差）。这使得模型能够更好地泛化到训练集之外的数据</p>
+<p>为了计算简单，加快优化，对 VLB 损失中的均值项进行了 stop-gradient，从而让  $\mathcal{L}_{\text{simple}}$依然是均值的主要决定因素。</p>
+<p>IDDPM 的训练使用了两个主要目标：</p>
+<p>1.<strong>$\mathcal{L}_{\text{simple}}$：</strong> 主要负责优化 <strong>去噪均值（即 </strong>$\mathbf{\epsilon}_\theta$<strong>）</strong>。</p>
+<p>2.<strong>$\mathcal{L}_{\text{VLB}}$：</strong> 主要负责优化 <strong>反向过程的方差 </strong></p>
+$$\mathbf{\Sigma}_\theta$$<p>（因为均值部分已经被 $\mathcal{L}_{\text{simple}}$ 充分优化）。</p>
+<p>KL散度计算（注意，模型预测的方差实际上是方差的log形式）：</p>
+<p><img src="/AMS_Blog/p/diffusion/images/image-6.png"
+	width="578"
+	height="176"
+	srcset="/AMS_Blog/p/diffusion/images/image-6_hu_d4c43fafcce0591a.png 480w, /AMS_Blog/p/diffusion/images/image-6_hu_208703a774851b79.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="328"
+		data-flex-basis="788px"
+	
+></p>
+<h2 id="4-classifier-free-guidance">4. Classifier Free Guidance
+</h2><p>通过加入condition，来引导生成的图像朝着我们想要的方向进行。</p>
+<p>中间计算过程不再推导，基于Classifier Guidance实现</p>
+<p>如下所示。两项分别是无条件生成的分数以及从无条件生成指向有条件生成的方向，这样看就更清晰了：classifier-free guidance 就是从无条件生成的基础上向某个条件的方向移动， s是一个用来控制条件重要性的参数。</p>
+<p><img src="/AMS_Blog/p/diffusion/images/image-15.png"
+	width="585"
+	height="70"
+	srcset="/AMS_Blog/p/diffusion/images/image-15_hu_a6a6e8fda5753dbb.png 480w, /AMS_Blog/p/diffusion/images/image-15_hu_f00bb63b34c3b407.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="835"
+		data-flex-basis="2005px"
+	
+></p>
+<p>可以通过分别对无条件生成和有条件生成进行学习，得到无需分类器的有条件生成模型。(无条件生成是有条件生成的基础，生成的质量和多样性是由无条件生成的分数保证的，如果只有有条件生成而没有无条件生成，那么生成效果可能不佳。)</p>
+<p>为了联合训练有条件和无条件的情况，在训练时需要以一定的概率p 将条件输入替换为空 。</p>
+<p><img src="/AMS_Blog/p/diffusion/images/image-16.png"
+	width="1280"
+	height="416"
+	srcset="/AMS_Blog/p/diffusion/images/image-16_hu_4278b480eeda0054.png 480w, /AMS_Blog/p/diffusion/images/image-16_hu_d21b3027de99c318.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="307"
+		data-flex-basis="738px"
+	
+></p>
+<p>文中也给出了采样算法的流程，可以看到预测噪声由无条件和有条件两部分加权得到：</p>
+<p><img src="/AMS_Blog/p/diffusion/images/image-17.png"
+	width="1280"
+	height="527"
+	srcset="/AMS_Blog/p/diffusion/images/image-17_hu_8838a1749aaaf3cd.png 480w, /AMS_Blog/p/diffusion/images/image-17_hu_f2d7c1331f8fbd26.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="242"
+		data-flex-basis="582px"
+	
+></p>
+<h3 id="条件注入的方法">条件注入的方法
+</h3><p>我们知道去噪模型通常使用的都是 UNet，将条件注入 UNet 有几种比较常见的方式，即交叉注意力、通道注意力以及自适应归一化等。</p>
+<p>1.Cross Attention *</p>
+<p>交叉注意力是比较常用的一种条件注入方式，在注入时是以 x 为 query、以 condition 为 key 和 value。</p>
+<p><a class="link" href="https://zhuanlan.zhihu.com/p/1970452052778919816"  target="_blank" rel="noopener"
+    >https://zhuanlan.zhihu.com/p/1970452052778919816</a></p>
+<p>2.Channel-wise Attention *</p>
+<p>通道注意力相对比较简单。虽然叫注意力，但其实就是做完 projection 直接加到 time embedding 上。</p>
+<p><a class="link" href="https://www.cnblogs.com/medcs/p/18926383"  target="_blank" rel="noopener"
+    >https://www.cnblogs.com/medcs/p/18926383</a></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">TimestepEmbedding</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">   <span class="o">...</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">   <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sample</span><span class="p">,</span> <span class="n">condition</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">       <span class="k">if</span> <span class="n">condition</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span> <span class="c1"># 条件在这里注入</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">           <span class="n">sample</span> <span class="o">=</span> <span class="n">sample</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">cond_proj</span><span class="p">(</span><span class="n">condition</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">       <span class="n">sample</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">linear_1</span><span class="p">(</span><span class="n">sample</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">       <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">act</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">           <span class="n">sample</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">act</span><span class="p">(</span><span class="n">sample</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">       <span class="n">sample</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">linear_2</span><span class="p">(</span><span class="n">sample</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">       <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">post_act</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">           <span class="n">sample</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">post_act</span><span class="p">(</span><span class="n">sample</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">       <span class="k">return</span> <span class="n">sample</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>上述代码中的 <code>cond_proj</code> 的定义如下，可以看到就是一个 linear 层：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="bp">self</span><span class="o">.</span><span class="n">cond_proj</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">cond_proj_dim</span><span class="p">,</span> <span class="n">in_channels</span><span class="p">,</span> <span class="n">bias</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div>
+</section>
+
+
+    <footer class="article-footer">
+    
+
+    
+    <section class="article-copyright">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <path d="M14.5 9a3.5 4 0 1 0 0 6" />
+</svg>
+
+
+
+        <span>Licensed under CC BY-NC-SA 4.0</span>
+    </section>
+    </footer>
+
+
+    
+        <link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css"integrity="sha384-n8MVd4RsNIU0tAv4ct0nTaAbDJwPJzDEaqSD1odI&#43;WdtXRGWt2kTvGFasHpSy3SV"crossorigin="anonymous"
+            ><script 
+                src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"integrity="sha384-XjKyOOlGwcjNTAIQHIpgOno0Hl1YQqzUOEleOLALmuqehneUG&#43;vnGctmUb0ZY0l8"crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"integrity="sha384-&#43;VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4&#43;/RRE05"crossorigin="anonymous"
+                defer
+                >
+            </script><script>
+    window.addEventListener("DOMContentLoaded", () => {
+        const elementsToRender = [".main-article", ".widget--toc"];
+
+        elementsToRender.forEach(selector => {
+            const element = document.querySelector(selector);
+            if (element) {
+                renderMathInElement(element, {
+                    delimiters: [
+                        { left: "$$", right: "$$", display: true },
+                        { left: "$", right: "$", display: false },
+                        { left: "\\(", right: "\\)", display: false },
+                        { left: "\\[", right: "\\]", display: true }
+                    ],
+                    ignoredClasses: ["gist"]
+                });
+            }
+        });
+    });
+</script>
+    
+</article>
+
+    
+
+    
+
+     
+    
+        
+    <script src="https://utteranc.es/client.js" 
+        repo=""
+        issue-term="pathname"
+        
+        crossorigin="anonymous"
+        async
+        >
+</script>
+
+<style>
+    .utterances {
+        max-width: unset;
+    }
+</style>
+
+<script>
+    let utterancesLoaded = false;
+
+    function setUtterancesTheme(theme) {
+        let utterances = document.querySelector('.utterances iframe');
+        if (utterances) {
+            utterances.contentWindow.postMessage(
+                {
+                    type: 'set-theme',
+                    theme: `github-${theme}`
+                },
+                'https://utteranc.es'
+            );
+        }
+    }
+
+    addEventListener('message', event => {
+        if (event.origin !== 'https://utteranc.es') return;
+
+        
+        utterancesLoaded = true;
+        setUtterancesTheme(document.documentElement.dataset.scheme)
+    });
+
+    window.addEventListener('onColorSchemeChange', (e) => {
+        if (!utterancesLoaded) return;
+        setUtterancesTheme(e.detail)
+    })
+</script>
+
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2025 - 
+        
+        2026 Ovo
+    </section>
+    
+    <section class="powerby">
+        
+            ovO <br/>
+        使用 <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> 构建 <br />
+        主题 <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.33.0">Stack</a></b> 由 <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a> 设计
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css"crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css"crossorigin="anonymous"
+            >
+    
+
+            </main>
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
+                
+                >
+            </script><script type="text/javascript" src="/AMS_Blog/ts/main.c922af694cc257bf1ecc41c0dd7b0430f9114ec280ccf67cd2c6ad55f5316c4e.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </body>
+</html>
