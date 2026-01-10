@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
     <channel>
-        <title>Posts on ams</title>
-        <link>https://lilzee123.github.io/AMS_Blog/post/</link>
-        <description>Recent content in Posts on ams</description>
+        <title>Diffusion Model on ams</title>
+        <link>https://lilzee123.github.io/AMS_Blog/categories/diffusion-model/</link>
+        <description>Recent content in Diffusion Model on ams</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
         <copyright>Ovo</copyright>
-        <lastBuildDate>Thu, 08 Jan 2026 18:39:21 +0800</lastBuildDate><atom:link href="https://lilzee123.github.io/AMS_Blog/post/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Thu, 08 Jan 2026 18:39:21 +0800</lastBuildDate><atom:link href="https://lilzee123.github.io/AMS_Blog/categories/diffusion-model/index.xml" rel="self" type="application/rss+xml" /><item>
         <title>Diffusion</title>
         <link>https://lilzee123.github.io/AMS_Blog/p/diffusion/</link>
         <pubDate>Thu, 08 Jan 2026 18:39:21 +0800</pubDate>

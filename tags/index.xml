@@ -7,36 +7,20 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
         <copyright>Ovo</copyright>
-        <lastBuildDate>Mon, 11 Mar 2019 00:00:00 +0000</lastBuildDate><atom:link href="https://lilzee123.github.io/AMS_Blog/tags/index.xml" rel="self" type="application/rss+xml" /><item>
-        <title>Css</title>
-        <link>https://lilzee123.github.io/AMS_Blog/tags/css/</link>
-        <pubDate>Mon, 11 Mar 2019 00:00:00 +0000</pubDate>
+        <lastBuildDate>Thu, 08 Jan 2026 18:39:21 +0800</lastBuildDate><atom:link href="https://lilzee123.github.io/AMS_Blog/tags/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>Diffusion Model</title>
+        <link>https://lilzee123.github.io/AMS_Blog/tags/diffusion-model/</link>
+        <pubDate>Thu, 08 Jan 2026 18:39:21 +0800</pubDate>
         
-        <guid>https://lilzee123.github.io/AMS_Blog/tags/css/</guid>
+        <guid>https://lilzee123.github.io/AMS_Blog/tags/diffusion-model/</guid>
         <description></description>
         </item>
         <item>
-        <title>Html</title>
-        <link>https://lilzee123.github.io/AMS_Blog/tags/html/</link>
-        <pubDate>Mon, 11 Mar 2019 00:00:00 +0000</pubDate>
+        <title>Machine Learning</title>
+        <link>https://lilzee123.github.io/AMS_Blog/tags/machine-learning/</link>
+        <pubDate>Thu, 08 Jan 2026 18:39:21 +0800</pubDate>
         
-        <guid>https://lilzee123.github.io/AMS_Blog/tags/html/</guid>
-        <description></description>
-        </item>
-        <item>
-        <title>Markdown</title>
-        <link>https://lilzee123.github.io/AMS_Blog/tags/markdown/</link>
-        <pubDate>Mon, 11 Mar 2019 00:00:00 +0000</pubDate>
-        
-        <guid>https://lilzee123.github.io/AMS_Blog/tags/markdown/</guid>
-        <description></description>
-        </item>
-        <item>
-        <title>Themes</title>
-        <link>https://lilzee123.github.io/AMS_Blog/tags/themes/</link>
-        <pubDate>Mon, 11 Mar 2019 00:00:00 +0000</pubDate>
-        
-        <guid>https://lilzee123.github.io/AMS_Blog/tags/themes/</guid>
+        <guid>https://lilzee123.github.io/AMS_Blog/tags/machine-learning/</guid>
         <description></description>
         </item>
         
