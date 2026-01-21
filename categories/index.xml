@@ -7,7 +7,15 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
         <copyright>Ovo</copyright>
-        <lastBuildDate>Thu, 08 Jan 2026 18:39:21 +0800</lastBuildDate><atom:link href="https://lilzee123.github.io/AMS_Blog/categories/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Wed, 21 Jan 2026 14:20:44 +0800</lastBuildDate><atom:link href="https://lilzee123.github.io/AMS_Blog/categories/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>SSH</title>
+        <link>https://lilzee123.github.io/AMS_Blog/categories/ssh/</link>
+        <pubDate>Wed, 21 Jan 2026 14:20:44 +0800</pubDate>
+        
+        <guid>https://lilzee123.github.io/AMS_Blog/categories/ssh/</guid>
+        <description></description>
+        </item>
+        <item>
         <title>Diffusion Model</title>
         <link>https://lilzee123.github.io/AMS_Blog/categories/diffusion-model/</link>
         <pubDate>Thu, 08 Jan 2026 18:39:21 +0800</pubDate>

@@ -3,7 +3,7 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://lilzee123.github.io/AMS_Blog/</loc>
-    <lastmod>2026-01-08T18:39:21+08:00</lastmod>
+    <lastmod>2026-01-21T14:20:44+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
@@ -16,7 +16,7 @@
                 />
   </url><url>
     <loc>https://lilzee123.github.io/AMS_Blog/categories/</loc>
-    <lastmod>2026-01-08T18:39:21+08:00</lastmod>
+    <lastmod>2026-01-21T14:20:44+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
@@ -27,6 +27,31 @@
                 hreflang="zh-cn"
                 href="https://lilzee123.github.io/AMS_Blog/categories/"
                 />
+  </url><url>
+    <loc>https://lilzee123.github.io/AMS_Blog/post/</loc>
+    <lastmod>2026-01-21T14:20:44+08:00</lastmod>
+  </url><url>
+    <loc>https://lilzee123.github.io/AMS_Blog/categories/ssh/</loc>
+    <lastmod>2026-01-21T14:20:44+08:00</lastmod>
+  </url><url>
+    <loc>https://lilzee123.github.io/AMS_Blog/tags/ssh/</loc>
+    <lastmod>2026-01-21T14:20:44+08:00</lastmod>
+  </url><url>
+    <loc>https://lilzee123.github.io/AMS_Blog/tags/</loc>
+    <lastmod>2026-01-21T14:20:44+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="https://lilzee123.github.io/AMS_Blog/en/tags/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="https://lilzee123.github.io/AMS_Blog/tags/"
+                />
+  </url><url>
+    <loc>https://lilzee123.github.io/AMS_Blog/p/%E4%BD%BF%E7%94%A8ssh%E5%8F%8D%E5%90%91%E8%BF%9E%E6%8E%A5%E5%86%85%E7%BD%91%E6%9C%8D%E5%8A%A1%E5%99%A8/</loc>
+    <lastmod>2026-01-21T14:20:44+08:00</lastmod>
   </url><url>
     <loc>https://lilzee123.github.io/AMS_Blog/p/diffusion/</loc>
     <lastmod>2026-01-08T18:39:21+08:00</lastmod>
@@ -42,22 +67,6 @@
   </url><url>
     <loc>https://lilzee123.github.io/AMS_Blog/tags/machine-learning/</loc>
     <lastmod>2026-01-08T18:39:21+08:00</lastmod>
-  </url><url>
-    <loc>https://lilzee123.github.io/AMS_Blog/post/</loc>
-    <lastmod>2026-01-08T18:39:21+08:00</lastmod>
-  </url><url>
-    <loc>https://lilzee123.github.io/AMS_Blog/tags/</loc>
-    <lastmod>2026-01-08T18:39:21+08:00</lastmod>
-    <xhtml:link
-                rel="alternate"
-                hreflang="en"
-                href="https://lilzee123.github.io/AMS_Blog/en/tags/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="zh-cn"
-                href="https://lilzee123.github.io/AMS_Blog/tags/"
-                />
   </url><url>
     <loc>https://lilzee123.github.io/AMS_Blog/page/</loc>
     <lastmod>2019-05-28T00:00:00+00:00</lastmod>
