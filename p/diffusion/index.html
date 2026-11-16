@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang="zh-cn" dir="ltr">
+<html lang="en-us" dir="ltr">
     <head><meta charset='utf-8'>
 <meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="1. DDPM 前向扩散：对一张图片不断加入噪声（正态分布），产生一系列噪声数据。\n去噪过程：训练一个噪声predicter，预测每一个噪声图片的噪声。\nDiffusion的成功：N次迭代？\n">
 <title>Diffusion</title>
 
 <link rel='canonical' href='https://lilzee123.github.io/AMS_Blog/p/diffusion/'>
 
-<link rel="stylesheet" href="/AMS_Blog/scss/style.min.b0b5dc61c9c668a9825df55eb3fb4b6f2b6e4dc815d5bd5ba6b1375d14b9fca6.css"><meta property='og:title' content="Diffusion">
+<link rel="stylesheet" href="/AMS_Blog/scss/style.min.2651bcf1db9fa584d8a81889560e2a5686b8803e43fb932ecf2fc563bb3a4a8a.css"><meta property='og:title' content="Diffusion">
 <meta property='og:description' content="1. DDPM 前向扩散：对一张图片不断加入噪声（正态分布），产生一系列噪声数据。\n去噪过程：训练一个噪声predicter，预测每一个噪声图片的噪声。\nDiffusion的成功：N次迭代？\n">
 <meta property='og:url' content='https://lilzee123.github.io/AMS_Blog/p/diffusion/'>
 <meta property='og:site_name' content='ams'>
@@ -59,7 +59,7 @@
                     
                     
                         
-                        <img src="/AMS_Blog/img/avatar_hu_ef871973c364f0b6.png" width="300"
+                        <img src="/AMS_Blog/img/avatar_hu_b41998abcce312f2.png" width="300"
                             height="300" class="site-logo" loading="lazy" alt="Avatar">
                     
                 
@@ -280,8 +280,8 @@
     <header class="article-header">
         <div class="article-image">
             <a href="/AMS_Blog/p/diffusion/">
-                <img src="/AMS_Blog/p/diffusion/Haruka_hu_e6d003589726a331.png"
-                        srcset="/AMS_Blog/p/diffusion/Haruka_hu_e6d003589726a331.png 800w, /AMS_Blog/p/diffusion/Haruka_hu_bfd101707df17ab4.png 1600w"
+                <img src="/AMS_Blog/p/diffusion/Haruka_hu_72925829feabc062.png"
+                        srcset="/AMS_Blog/p/diffusion/Haruka_hu_72925829feabc062.png 800w, /AMS_Blog/p/diffusion/Haruka_hu_dffd4d412311084.png 1600w"
                         width="800" 
                         height="457" 
                         loading="lazy"
@@ -345,7 +345,7 @@
 
 
                 <time class="article-time--reading">
-                    阅读时长: 7 分钟
+                    阅读时长: 6 分钟
                 </time>
             </div>
         
@@ -374,7 +374,7 @@
 <p><img src="/AMS_Blog/p/diffusion/images/image-14.png"
 	width="829"
 	height="235"
-	srcset="/AMS_Blog/p/diffusion/images/image-14_hu_2e225eea30313f03.png 480w, /AMS_Blog/p/diffusion/images/image-14_hu_3317af237bf0864e.png 1024w"
+	srcset="/AMS_Blog/p/diffusion/images/image-14_hu_3a266ff64a97a88e.png 480w, /AMS_Blog/p/diffusion/images/image-14_hu_c765241d55a9682d.png 1024w"
 	loading="lazy"
 	
 	
@@ -390,7 +390,7 @@
 <p><img src="/AMS_Blog/p/diffusion/images/image-9.png"
 	width="936"
 	height="428"
-	srcset="/AMS_Blog/p/diffusion/images/image-9_hu_6f94b4b358480831.png 480w, /AMS_Blog/p/diffusion/images/image-9_hu_17ac036f2956c1d9.png 1024w"
+	srcset="/AMS_Blog/p/diffusion/images/image-9_hu_a213a72b39e65188.png 480w, /AMS_Blog/p/diffusion/images/image-9_hu_d95a957d17998d8d.png 1024w"
 	loading="lazy"
 	
 	
@@ -402,7 +402,7 @@
 <p><img src="/AMS_Blog/p/diffusion/images/image-11.png"
 	width="830"
 	height="402"
-	srcset="/AMS_Blog/p/diffusion/images/image-11_hu_26b259ea0a2fd20e.png 480w, /AMS_Blog/p/diffusion/images/image-11_hu_39a08ceb02c382f.png 1024w"
+	srcset="/AMS_Blog/p/diffusion/images/image-11_hu_53e94bd6112868bb.png 480w, /AMS_Blog/p/diffusion/images/image-11_hu_db15093f9c908531.png 1024w"
 	loading="lazy"
 	
 	
@@ -418,7 +418,7 @@
 <p><img src="/AMS_Blog/p/diffusion/images/image-8.png"
 	width="483"
 	height="140"
-	srcset="/AMS_Blog/p/diffusion/images/image-8_hu_e14112f70a83c24e.png 480w, /AMS_Blog/p/diffusion/images/image-8_hu_85c3da7bfb52eb9c.png 1024w"
+	srcset="/AMS_Blog/p/diffusion/images/image-8_hu_efddad0bc5f099ad.png 480w, /AMS_Blog/p/diffusion/images/image-8_hu_709c597f900a864a.png 1024w"
 	loading="lazy"
 	
 	
@@ -431,7 +431,7 @@
 <p><img src="/AMS_Blog/p/diffusion/images/image-7.png"
 	width="949"
 	height="295"
-	srcset="/AMS_Blog/p/diffusion/images/image-7_hu_4d2c991431918eb.png 480w, /AMS_Blog/p/diffusion/images/image-7_hu_2fce253d3cd76674.png 1024w"
+	srcset="/AMS_Blog/p/diffusion/images/image-7_hu_edc79632cc2a98f9.png 480w, /AMS_Blog/p/diffusion/images/image-7_hu_8450600ef9273f3d.png 1024w"
 	loading="lazy"
 	
 	
@@ -463,7 +463,7 @@
 <p><img src="/AMS_Blog/p/diffusion/images/image-13.png"
 	width="758"
 	height="386"
-	srcset="/AMS_Blog/p/diffusion/images/image-13_hu_9fc78ade9637443b.png 480w, /AMS_Blog/p/diffusion/images/image-13_hu_dd675ff5d3b883e9.png 1024w"
+	srcset="/AMS_Blog/p/diffusion/images/image-13_hu_629995c814f436bf.png 480w, /AMS_Blog/p/diffusion/images/image-13_hu_2c4948f221e46c6c.png 1024w"
 	loading="lazy"
 	
 	
@@ -476,7 +476,7 @@
 $$x_{0}到x_{t}可以简化为如下公式，因此可以把beta式简化为alpha_{t},alpha_{t}由大变小$$<p><img src="/AMS_Blog/p/diffusion/images/image-12.png"
 	width="981"
 	height="551"
-	srcset="/AMS_Blog/p/diffusion/images/image-12_hu_68d94e240805c4ee.png 480w, /AMS_Blog/p/diffusion/images/image-12_hu_e37fcd396f1cbbc8.png 1024w"
+	srcset="/AMS_Blog/p/diffusion/images/image-12_hu_8e1f6bdb19c015be.png 480w, /AMS_Blog/p/diffusion/images/image-12_hu_79986c5eb9bf6581.png 1024w"
 	loading="lazy"
 	
 	
@@ -492,7 +492,7 @@ $$x_{0}到x_{t}可以简化为如下公式，因此可以把beta式简化为alph
 <p><img src="/AMS_Blog/p/diffusion/images/image.png"
 	width="248"
 	height="110"
-	srcset="/AMS_Blog/p/diffusion/images/image_hu_7585ce55e1b585c4.png 480w, /AMS_Blog/p/diffusion/images/image_hu_43cbb3921b2cbcf9.png 1024w"
+	srcset="/AMS_Blog/p/diffusion/images/image_hu_90b5d69536f6384c.png 480w, /AMS_Blog/p/diffusion/images/image_hu_1686d40d9dfa845b.png 1024w"
 	loading="lazy"
 	
 	
@@ -506,7 +506,7 @@ $$x_{0}到x_{t}可以简化为如下公式，因此可以把beta式简化为alph
 $$\hat{x}_0 = \frac{1}{\sqrt{\bar{\alpha}_t}}(x_t - \sqrt{1-\bar{\alpha}_t} \epsilon_\theta)$$$$\tilde{mu}_t = \frac{\sqrt{\bar{\alpha}_{t-1}}\beta_t}{1-\bar{\alpha}_t}x_0 + \frac{\sqrt{\alpha_t}(1-\bar{\alpha}_{t-1})}{1-\bar{\alpha}_t}x_t$$<p><img src="/AMS_Blog/p/diffusion/images/image-10.png"
 	width="675"
 	height="257"
-	srcset="/AMS_Blog/p/diffusion/images/image-10_hu_d0169064ae54dee1.png 480w, /AMS_Blog/p/diffusion/images/image-10_hu_d0ed5259126b503c.png 1024w"
+	srcset="/AMS_Blog/p/diffusion/images/image-10_hu_935126b861b904a7.png 480w, /AMS_Blog/p/diffusion/images/image-10_hu_797c42d60b3ee14b.png 1024w"
 	loading="lazy"
 	
 	
@@ -518,7 +518,7 @@ $$\hat{x}_0 = \frac{1}{\sqrt{\bar{\alpha}_t}}(x_t - \sqrt{1-\bar{\alpha}_t} \eps
 <p><img src="/AMS_Blog/p/diffusion/images/image-1.png"
 	width="984"
 	height="301"
-	srcset="/AMS_Blog/p/diffusion/images/image-1_hu_db123642e31f8a12.png 480w, /AMS_Blog/p/diffusion/images/image-1_hu_f02e887ff5ffd056.png 1024w"
+	srcset="/AMS_Blog/p/diffusion/images/image-1_hu_42482cca4410a788.png 480w, /AMS_Blog/p/diffusion/images/image-1_hu_fd5da5c69858ae5a.png 1024w"
 	loading="lazy"
 	
 	
@@ -537,7 +537,7 @@ $$\tilde{\beta}_t = \frac{1-\bar{\alpha}_{t-1}}{1-\bar{\alpha}_t} \beta_t $$<p> 
 <p><img src="/AMS_Blog/p/diffusion/images/image-2.png"
 	width="356"
 	height="50"
-	srcset="/AMS_Blog/p/diffusion/images/image-2_hu_9002ef57dbf0c236.png 480w, /AMS_Blog/p/diffusion/images/image-2_hu_54136d0e44ca8c54.png 1024w"
+	srcset="/AMS_Blog/p/diffusion/images/image-2_hu_797500775339926a.png 480w, /AMS_Blog/p/diffusion/images/image-2_hu_96169ecee519a291.png 1024w"
 	loading="lazy"
 	
 	
@@ -552,7 +552,7 @@ $$\tilde{\beta}_t = \frac{1-\bar{\alpha}_{t-1}}{1-\bar{\alpha}_t} \beta_t $$<p> 
 <p><img src="/AMS_Blog/p/diffusion/images/image-3.png"
 	width="128"
 	height="34"
-	srcset="/AMS_Blog/p/diffusion/images/image-3_hu_4f9e0c4610faaed5.png 480w, /AMS_Blog/p/diffusion/images/image-3_hu_a410911f0b706bba.png 1024w"
+	srcset="/AMS_Blog/p/diffusion/images/image-3_hu_440b022335af77f4.png 480w, /AMS_Blog/p/diffusion/images/image-3_hu_8cd84bf79953de5e.png 1024w"
 	loading="lazy"
 	
 	
@@ -565,7 +565,7 @@ $$\tilde{\beta}_t = \frac{1-\bar{\alpha}_{t-1}}{1-\bar{\alpha}_t} \beta_t $$<p> 
 <p><img src="/AMS_Blog/p/diffusion/images/image-4.png"
 	width="383"
 	height="79"
-	srcset="/AMS_Blog/p/diffusion/images/image-4_hu_bce26153df3bf976.png 480w, /AMS_Blog/p/diffusion/images/image-4_hu_fcc878c785ff9567.png 1024w"
+	srcset="/AMS_Blog/p/diffusion/images/image-4_hu_f7a22e7f1badca7b.png 480w, /AMS_Blog/p/diffusion/images/image-4_hu_48da83c15b54a79b.png 1024w"
 	loading="lazy"
 	
 	
@@ -577,7 +577,7 @@ $$\tilde{\beta}_t = \frac{1-\bar{\alpha}_{t-1}}{1-\bar{\alpha}_t} \beta_t $$<p> 
 <p><img src="/AMS_Blog/p/diffusion/images/image-5.png"
 	width="1280"
 	height="869"
-	srcset="/AMS_Blog/p/diffusion/images/image-5_hu_daf9393d09a11482.png 480w, /AMS_Blog/p/diffusion/images/image-5_hu_3f5768851434684.png 1024w"
+	srcset="/AMS_Blog/p/diffusion/images/image-5_hu_a314063b6bcd696c.png 480w, /AMS_Blog/p/diffusion/images/image-5_hu_4ac1dbdfa4da7765.png 1024w"
 	loading="lazy"
 	
 	
@@ -609,7 +609,7 @@ $$\mathbf{\Sigma}_\theta$$<p>（因为均值部分已经被 $\mathcal{L}_{\text{
 <p><img src="/AMS_Blog/p/diffusion/images/image-6.png"
 	width="578"
 	height="176"
-	srcset="/AMS_Blog/p/diffusion/images/image-6_hu_d4c43fafcce0591a.png 480w, /AMS_Blog/p/diffusion/images/image-6_hu_208703a774851b79.png 1024w"
+	srcset="/AMS_Blog/p/diffusion/images/image-6_hu_e1ea29618b34903a.png 480w, /AMS_Blog/p/diffusion/images/image-6_hu_44380dd3d299b55.png 1024w"
 	loading="lazy"
 	
 	
@@ -625,7 +625,7 @@ $$\mathbf{\Sigma}_\theta$$<p>（因为均值部分已经被 $\mathcal{L}_{\text{
 <p><img src="/AMS_Blog/p/diffusion/images/image-15.png"
 	width="585"
 	height="70"
-	srcset="/AMS_Blog/p/diffusion/images/image-15_hu_a6a6e8fda5753dbb.png 480w, /AMS_Blog/p/diffusion/images/image-15_hu_f00bb63b34c3b407.png 1024w"
+	srcset="/AMS_Blog/p/diffusion/images/image-15_hu_b53011e2773f5d01.png 480w, /AMS_Blog/p/diffusion/images/image-15_hu_294c5b106ed7f11c.png 1024w"
 	loading="lazy"
 	
 	
@@ -639,7 +639,7 @@ $$\mathbf{\Sigma}_\theta$$<p>（因为均值部分已经被 $\mathcal{L}_{\text{
 <p><img src="/AMS_Blog/p/diffusion/images/image-16.png"
 	width="1280"
 	height="416"
-	srcset="/AMS_Blog/p/diffusion/images/image-16_hu_4278b480eeda0054.png 480w, /AMS_Blog/p/diffusion/images/image-16_hu_d21b3027de99c318.png 1024w"
+	srcset="/AMS_Blog/p/diffusion/images/image-16_hu_1ed6a72a8ff077e7.png 480w, /AMS_Blog/p/diffusion/images/image-16_hu_f9f36bfb44ecad7d.png 1024w"
 	loading="lazy"
 	
 	
@@ -652,7 +652,7 @@ $$\mathbf{\Sigma}_\theta$$<p>（因为均值部分已经被 $\mathcal{L}_{\text{
 <p><img src="/AMS_Blog/p/diffusion/images/image-17.png"
 	width="1280"
 	height="527"
-	srcset="/AMS_Blog/p/diffusion/images/image-17_hu_8838a1749aaaf3cd.png 480w, /AMS_Blog/p/diffusion/images/image-17_hu_f2d7c1331f8fbd26.png 1024w"
+	srcset="/AMS_Blog/p/diffusion/images/image-17_hu_e7be32fcee28125a.png 480w, /AMS_Blog/p/diffusion/images/image-17_hu_23de69a632dab81e.png 1024w"
 	loading="lazy"
 	
 	
@@ -974,15 +974,82 @@ $$\mathbf{\Sigma}_\theta$$<p>（因为均值部分已经被 $\mathcal{L}_{\text{
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css">
 <script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script>
 
-<script src="https://cdn.jsdelivr.net/npm/meting@2/dist/Meting.min.js"></script>
+<div id="aplayer"></div>
 
-<meting-js
-	server="netease"
-	type="playlist"
-	id="7665583165"
-	fixed=true
-	mini=true>
-</meting-js>
+<script>
+  (function () {
+    
+    var query = "server=netease&type=playlist&id=7665583165";
+
+    
+    
+    var APIs = [
+      "https://api.qijieya.cn/meting/",
+      "https://api.injahow.cn/meting/"
+    ];
+
+    function fetchPlaylist(index) {
+      if (index >= APIs.length) {
+        return Promise.reject(new Error("all meting api failed"));
+      }
+      return fetch(APIs[index] + "?" + query)
+        .then(function (res) {
+          if (!res.ok) throw new Error("HTTP " + res.status);
+          return res.json();
+        })
+        .then(function (list) {
+          if (!Array.isArray(list) || !list.length) throw new Error("empty playlist");
+          return list;
+        })
+        .catch(function () {
+          return fetchPlaylist(index + 1);
+        });
+    }
+
+    function createPlayer(list) {
+      var player = new APlayer({
+        container: document.getElementById("aplayer"),
+        audio: list.map(function (song) {
+          return {
+            name: song.name,
+            artist: song.artist,
+            url: song.url,
+            cover: song.pic,
+            lrc: song.lrc,
+            type: "auto"
+          };
+        }),
+        fixed: true,
+        mini: true,
+        mutex: true,
+        listFolded: true,
+        lrcType: 3,
+        storageName: "metingjs"
+      });
+
+      
+      
+      var notice = player.notice.bind(player);
+      player.notice = function (text) {
+        if (/audio error/i.test(text)) return;
+        notice(text);
+      };
+    }
+
+    function init() {
+      if (!window.APlayer) {
+        setTimeout(init, 200);
+        return;
+      }
+      fetchPlaylist(0).then(createPlayer).catch(function (err) {
+        console.error("[APlayer] 歌单加载失败：", err);
+      });
+    }
+
+    init();
+  })();
+</script>
+
 <script src="https://cdn.jsdelivr.net/npm/pjax/pjax.min.js"></script>
 
 

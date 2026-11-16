@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang="zh-cn" dir="ltr">
+<html lang="en-us" dir="ltr">
     <head><meta charset='utf-8'>
 <meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="实现 SSH 反向隧道（Reverse SSH Tunnel）可以让你从公网直接访问处于内网（如家里、公司实验室）的服务器。\n准备工作 公网服务器（阿里云）：拥有公网 IP，假设为 1.2.3.4。 内网服务器：无法被公网直接访问的 Linux 机器。 本地控制端：安装了 VS Code 的电脑。 配置密钥登录（内网服务器 -&gt; 阿里云） 为了让反向隧道保持稳定且无需手动输入密码，建议配置密钥。\n">
 <title>使用ssh反向连接内网服务器</title>
 
 <link rel='canonical' href='https://lilzee123.github.io/AMS_Blog/p/%E4%BD%BF%E7%94%A8ssh%E5%8F%8D%E5%90%91%E8%BF%9E%E6%8E%A5%E5%86%85%E7%BD%91%E6%9C%8D%E5%8A%A1%E5%99%A8/'>
 
-<link rel="stylesheet" href="/AMS_Blog/scss/style.min.b0b5dc61c9c668a9825df55eb3fb4b6f2b6e4dc815d5bd5ba6b1375d14b9fca6.css"><meta property='og:title' content="使用ssh反向连接内网服务器">
+<link rel="stylesheet" href="/AMS_Blog/scss/style.min.2651bcf1db9fa584d8a81889560e2a5686b8803e43fb932ecf2fc563bb3a4a8a.css"><meta property='og:title' content="使用ssh反向连接内网服务器">
 <meta property='og:description' content="实现 SSH 反向隧道（Reverse SSH Tunnel）可以让你从公网直接访问处于内网（如家里、公司实验室）的服务器。\n准备工作 公网服务器（阿里云）：拥有公网 IP，假设为 1.2.3.4。 内网服务器：无法被公网直接访问的 Linux 机器。 本地控制端：安装了 VS Code 的电脑。 配置密钥登录（内网服务器 -&gt; 阿里云） 为了让反向隧道保持稳定且无需手动输入密码，建议配置密钥。\n">
 <meta property='og:url' content='https://lilzee123.github.io/AMS_Blog/p/%E4%BD%BF%E7%94%A8ssh%E5%8F%8D%E5%90%91%E8%BF%9E%E6%8E%A5%E5%86%85%E7%BD%91%E6%9C%8D%E5%8A%A1%E5%99%A8/'>
 <meta property='og:site_name' content='ams'>
@@ -59,7 +59,7 @@
                     
                     
                         
-                        <img src="/AMS_Blog/img/avatar_hu_ef871973c364f0b6.png" width="300"
+                        <img src="/AMS_Blog/img/avatar_hu_b41998abcce312f2.png" width="300"
                             height="300" class="site-logo" loading="lazy" alt="Avatar">
                     
                 
@@ -724,15 +724,82 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css">
 <script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script>
 
-<script src="https://cdn.jsdelivr.net/npm/meting@2/dist/Meting.min.js"></script>
+<div id="aplayer"></div>
 
-<meting-js
-	server="netease"
-	type="playlist"
-	id="7665583165"
-	fixed=true
-	mini=true>
-</meting-js>
+<script>
+  (function () {
+    
+    var query = "server=netease&type=playlist&id=7665583165";
+
+    
+    
+    var APIs = [
+      "https://api.qijieya.cn/meting/",
+      "https://api.injahow.cn/meting/"
+    ];
+
+    function fetchPlaylist(index) {
+      if (index >= APIs.length) {
+        return Promise.reject(new Error("all meting api failed"));
+      }
+      return fetch(APIs[index] + "?" + query)
+        .then(function (res) {
+          if (!res.ok) throw new Error("HTTP " + res.status);
+          return res.json();
+        })
+        .then(function (list) {
+          if (!Array.isArray(list) || !list.length) throw new Error("empty playlist");
+          return list;
+        })
+        .catch(function () {
+          return fetchPlaylist(index + 1);
+        });
+    }
+
+    function createPlayer(list) {
+      var player = new APlayer({
+        container: document.getElementById("aplayer"),
+        audio: list.map(function (song) {
+          return {
+            name: song.name,
+            artist: song.artist,
+            url: song.url,
+            cover: song.pic,
+            lrc: song.lrc,
+            type: "auto"
+          };
+        }),
+        fixed: true,
+        mini: true,
+        mutex: true,
+        listFolded: true,
+        lrcType: 3,
+        storageName: "metingjs"
+      });
+
+      
+      
+      var notice = player.notice.bind(player);
+      player.notice = function (text) {
+        if (/audio error/i.test(text)) return;
+        notice(text);
+      };
+    }
+
+    function init() {
+      if (!window.APlayer) {
+        setTimeout(init, 200);
+        return;
+      }
+      fetchPlaylist(0).then(createPlayer).catch(function (err) {
+        console.error("[APlayer] 歌单加载失败：", err);
+      });
+    }
+
+    init();
+  })();
+</script>
+
 <script src="https://cdn.jsdelivr.net/npm/pjax/pjax.min.js"></script>
 
 

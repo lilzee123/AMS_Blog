@@ -1,13 +1,12 @@
 <!DOCTYPE html>
-<html lang="zh-cn" dir="ltr">
-    <head>
-	<meta name="generator" content="Hugo 0.154.5"><meta charset='utf-8'>
+<html lang="en-us" dir="ltr">
+    <head><meta charset='utf-8'>
 <meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="Go for ide">
 <title>ams</title>
 
 <link rel='canonical' href='https://lilzee123.github.io/AMS_Blog/'>
 
-<link rel="stylesheet" href="/AMS_Blog/scss/style.min.b0b5dc61c9c668a9825df55eb3fb4b6f2b6e4dc815d5bd5ba6b1375d14b9fca6.css"><meta property='og:title' content="ams">
+<link rel="stylesheet" href="/AMS_Blog/scss/style.min.2651bcf1db9fa584d8a81889560e2a5686b8803e43fb932ecf2fc563bb3a4a8a.css"><meta property='og:title' content="ams">
 <meta property='og:description' content="Go for ide">
 <meta property='og:url' content='https://lilzee123.github.io/AMS_Blog/'>
 <meta property='og:site_name' content='ams'>
@@ -16,7 +15,8 @@
 <meta name="twitter:description" content="Go for ide"><link rel="alternate" type="application/rss&#43;xml" href="https://lilzee123.github.io/AMS_Blog/index.xml">
     <link rel="shortcut icon" href="/AMS_Blog/favicon.ico" />
 
-    </head>
+    	<meta name="generator" content="Hugo 0.170.0">
+</head>
     <body class="">
     <script>
         (function() {
@@ -57,7 +57,7 @@
                     
                     
                         
-                        <img src="/AMS_Blog/img/avatar_hu_ef871973c364f0b6.png" width="300"
+                        <img src="/AMS_Blog/img/avatar_hu_b41998abcce312f2.png" width="300"
                             height="300" class="site-logo" loading="lazy" alt="Avatar">
                     
                 
@@ -410,8 +410,8 @@
     <header class="article-header">
         <div class="article-image">
             <a href="/AMS_Blog/p/diffusion/">
-                <img src="/AMS_Blog/p/diffusion/Haruka_hu_e6d003589726a331.png"
-                        srcset="/AMS_Blog/p/diffusion/Haruka_hu_e6d003589726a331.png 800w, /AMS_Blog/p/diffusion/Haruka_hu_bfd101707df17ab4.png 1600w"
+                <img src="/AMS_Blog/p/diffusion/Haruka_hu_72925829feabc062.png"
+                        srcset="/AMS_Blog/p/diffusion/Haruka_hu_72925829feabc062.png 800w, /AMS_Blog/p/diffusion/Haruka_hu_dffd4d412311084.png 1600w"
                         width="800" 
                         height="457" 
                         loading="lazy"
@@ -475,7 +475,7 @@
 
 
                 <time class="article-time--reading">
-                    阅读时长: 7 分钟
+                    阅读时长: 6 分钟
                 </time>
             </div>
         
@@ -527,15 +527,82 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css">
 <script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script>
 
-<script src="https://cdn.jsdelivr.net/npm/meting@2/dist/Meting.min.js"></script>
+<div id="aplayer"></div>
 
-<meting-js
-	server="netease"
-	type="playlist"
-	id="7665583165"
-	fixed=true
-	mini=true>
-</meting-js>
+<script>
+  (function () {
+    
+    var query = "server=netease&type=playlist&id=7665583165";
+
+    
+    
+    var APIs = [
+      "https://api.qijieya.cn/meting/",
+      "https://api.injahow.cn/meting/"
+    ];
+
+    function fetchPlaylist(index) {
+      if (index >= APIs.length) {
+        return Promise.reject(new Error("all meting api failed"));
+      }
+      return fetch(APIs[index] + "?" + query)
+        .then(function (res) {
+          if (!res.ok) throw new Error("HTTP " + res.status);
+          return res.json();
+        })
+        .then(function (list) {
+          if (!Array.isArray(list) || !list.length) throw new Error("empty playlist");
+          return list;
+        })
+        .catch(function () {
+          return fetchPlaylist(index + 1);
+        });
+    }
+
+    function createPlayer(list) {
+      var player = new APlayer({
+        container: document.getElementById("aplayer"),
+        audio: list.map(function (song) {
+          return {
+            name: song.name,
+            artist: song.artist,
+            url: song.url,
+            cover: song.pic,
+            lrc: song.lrc,
+            type: "auto"
+          };
+        }),
+        fixed: true,
+        mini: true,
+        mutex: true,
+        listFolded: true,
+        lrcType: 3,
+        storageName: "metingjs"
+      });
+
+      
+      
+      var notice = player.notice.bind(player);
+      player.notice = function (text) {
+        if (/audio error/i.test(text)) return;
+        notice(text);
+      };
+    }
+
+    function init() {
+      if (!window.APlayer) {
+        setTimeout(init, 200);
+        return;
+      }
+      fetchPlaylist(0).then(createPlayer).catch(function (err) {
+        console.error("[APlayer] 歌单加载失败：", err);
+      });
+    }
+
+    init();
+  })();
+</script>
+
 <script src="https://cdn.jsdelivr.net/npm/pjax/pjax.min.js"></script>
 
 

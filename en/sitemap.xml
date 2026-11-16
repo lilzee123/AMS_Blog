@@ -5,37 +5,37 @@
     <loc>https://lilzee123.github.io/AMS_Blog/en/categories/</loc>
     <xhtml:link
                 rel="alternate"
-                hreflang="zh-cn"
-                href="https://lilzee123.github.io/AMS_Blog/categories/"
+                hreflang="en"
+                href="https://lilzee123.github.io/AMS_Blog/en/categories/"
                 />
     <xhtml:link
                 rel="alternate"
-                hreflang="en"
-                href="https://lilzee123.github.io/AMS_Blog/en/categories/"
+                hreflang="en-us"
+                href="https://lilzee123.github.io/AMS_Blog/categories/"
                 />
   </url><url>
     <loc>https://lilzee123.github.io/AMS_Blog/en/</loc>
     <xhtml:link
                 rel="alternate"
-                hreflang="zh-cn"
-                href="https://lilzee123.github.io/AMS_Blog/"
+                hreflang="en"
+                href="https://lilzee123.github.io/AMS_Blog/en/"
                 />
     <xhtml:link
                 rel="alternate"
-                hreflang="en"
-                href="https://lilzee123.github.io/AMS_Blog/en/"
+                hreflang="en-us"
+                href="https://lilzee123.github.io/AMS_Blog/"
                 />
   </url><url>
     <loc>https://lilzee123.github.io/AMS_Blog/en/tags/</loc>
     <xhtml:link
                 rel="alternate"
-                hreflang="zh-cn"
-                href="https://lilzee123.github.io/AMS_Blog/tags/"
+                hreflang="en"
+                href="https://lilzee123.github.io/AMS_Blog/en/tags/"
                 />
     <xhtml:link
                 rel="alternate"
-                hreflang="en"
-                href="https://lilzee123.github.io/AMS_Blog/en/tags/"
+                hreflang="en-us"
+                href="https://lilzee123.github.io/AMS_Blog/tags/"
                 />
   </url>
 </urlset>
